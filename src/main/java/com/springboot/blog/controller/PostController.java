@@ -1,7 +1,10 @@
 package com.springboot.blog.controller;
 
 import com.springboot.blog.payload.PostDto;
+import com.springboot.blog.payload.PostResponse;
 import com.springboot.blog.service.PostService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +15,14 @@ import java.util.List;
 @RequestMapping("/api/posts")
 public class PostController {
 
+//    private Log logger = LogFactory.getLog(AccountEntryClassification.class);
+
+//    private Log logger = LogFactory.getLog(PostController.class);
+
     //Note we are injecting an interface here which means we are loose coupling: we are not tightly coupling with the classes
     //we can omit @Autowired annotation because we have a no argument constructor for the injected interface/class
     private PostService postService;
+
 
     public PostController(PostService postService) {
         this.postService = postService;
@@ -28,8 +36,12 @@ public class PostController {
 
     //get all posts rest api
     @GetMapping
-    public List<PostDto> getAllPosts() {
-        return postService.getAllPosts();
+    public PostResponse getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false ) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize)
+    {
+
+        return postService.getAllPosts(pageNo, pageSize);
     }
 
     //get post by id
