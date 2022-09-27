@@ -1,12 +1,13 @@
 package com.springboot.blog.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -26,5 +27,9 @@ public class Post {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    //we are using Set here because a set does not allow duplicates than a List
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 
 }
